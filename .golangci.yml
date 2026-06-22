@@ -1,0 +1,15 @@
+run:
+  timeout: 3m
+
+linters:
+  enable:
+    - govet
+    - errcheck
+    - staticcheck
+    - unused
+    - gosimple
+    - ineffassign
+
+linters-settings:
+  lll:
+    line-length: 120
