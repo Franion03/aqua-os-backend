@@ -1,6 +1,6 @@
 package models
 
-import "time"
+
 
 type Level struct {
 	ID          int        `json:"id"`
@@ -8,8 +8,8 @@ type Level struct {
 	Description string     `json:"description"`
 	Order       int        `json:"order"`
 	Skills      string     `json:"skills"`
-	CreatedAt   time.Time  `json:"created_at"`
-	UpdatedAt   time.Time  `json:"updated_at"`
+	CreatedAt   string     `json:"created_at"`
+	UpdatedAt   string     `json:"updated_at"`
 	Exercises   []Exercise `json:"exercises,omitempty"`
 }
 

@@ -112,6 +112,53 @@ func seedLevels() error {
 		}
 	}
 	log.Println("Seeded 7 levels")
+
+	if err := seedExercises(); err != nil {
+		return err
+	}
+	return nil
+}
+
+func seedExercises() error {
+	exercises := []models.ExerciseCreate{
+		// Level 1 — Water Competency
+		{LevelID: 1, Name: "Freestyle Technique Drill", Description: "50m freestyle focusing on body rotation, bilateral breathing, and high elbow catch. Coach observes from deck giving real-time feedback.", SkillCategory: "swimming", Difficulty: "beginner", Equipment: "kickboard, pull buoy", DurationMinutes: 15, YoutubeURL: "https://www.youtube.com/watch?v=s20VLN7ACWI"},
+		{LevelID: 1, Name: "Eggbeater Stability Challenge", Description: "Players maintain eggbeater kick while holding ball overhead with both hands for 30s intervals. Progress to single hand, then catching passes while stationary.", SkillCategory: "conditioning", Difficulty: "beginner", Equipment: "water polo ball", DurationMinutes: 10, YoutubeURL: "https://www.youtube.com/watch?v=q3xC0nF65Dc"},
+		{LevelID: 1, Name: "Ball Familiarization Circuit", Description: "5 stations: grip squeeze, toss-and-catch, two-hand overhead throw, dribble 10m, scoop pickup from water. 2 min per station, rotate.", SkillCategory: "ball_handling", Difficulty: "beginner", Equipment: "water polo balls (1 per player), cones", DurationMinutes: 12, YoutubeURL: ""},
+		// Level 2 — Passing & Movement
+		{LevelID: 2, Name: "Partner Passing Progression", Description: "Pairs 3m apart: 10 static passes each hand, then move to 5m, then passing while treading. Focus on wrist snap, ball spin, and finger placement on release.", SkillCategory: "passing", Difficulty: "beginner", Equipment: "water polo balls", DurationMinutes: 15, YoutubeURL: "https://www.youtube.com/watch?v=FpJEnMbR9xY"},
+		{LevelID: 2, Name: "Moving Catch & Release", Description: "Player swims head-up, receives pass from coach, immediately passes to target without stopping. Alternate sides. Emphasize one fluid motion.", SkillCategory: "passing", Difficulty: "intermediate", Equipment: "water polo balls, floating targets", DurationMinutes: 12, YoutubeURL: ""},
+		{LevelID: 2, Name: "Dribble Relay Race", Description: "Teams of 3. Dribble head-up across pool, tag teammate. Ball must stay within arm's reach. Emphasize speed with control.", SkillCategory: "swimming", Difficulty: "beginner", Equipment: "water polo balls, lane ropes", DurationMinutes: 10, YoutubeURL: ""},
+		// Level 3 — Pressure & Tactics
+		{LevelID: 3, Name: "Faking Drill (Short & Medium)", Description: "Player at 5m: perform short fake (ball doesn't leave hand), then medium fake (arm goes back). Defender reacts. 10 reps each type, alternate attacker/defender.", SkillCategory: "shooting", Difficulty: "intermediate", Equipment: "water polo balls, goal", DurationMinutes: 15, YoutubeURL: "https://www.youtube.com/watch?v=KcCN8F3YNAM"},
+		{LevelID: 3, Name: "3v2 Man-Up Basic", Description: "Offensive triangle vs 2 defenders. Attack must complete 3 passes before shooting. Defenders communicate and rotate. Teach basic man-up positioning.", SkillCategory: "tactics", Difficulty: "intermediate", Equipment: "water polo balls, goal, caps", DurationMinutes: 20, YoutubeURL: ""},
+		{LevelID: 3, Name: "Ball Shielding Under Pressure", Description: "Attacker holds ball, defender applies light body pressure from behind. Attacker maintains possession using body positioning for 15s. Rotate roles.", SkillCategory: "ball_handling", Difficulty: "intermediate", Equipment: "water polo balls", DurationMinutes: 10, YoutubeURL: ""},
+		// Level 4 — Individual Dominance
+		{LevelID: 4, Name: "1v1 Drive to Outside Lane", Description: "Attacker at 5m, defender on hip. Attacker must win outside position and receive ball for shot. Focus on swim speed, body contact, and positioning.", SkillCategory: "swimming", Difficulty: "advanced", Equipment: "water polo balls, goal", DurationMinutes: 15, YoutubeURL: ""},
+		{LevelID: 4, Name: "Press Defense Fundamentals", Description: "Defender practices pressing technique: hand on ball, hips low, feet moving. Attacker tries to turn and shoot. 30s rounds, switch roles.", SkillCategory: "defense", Difficulty: "advanced", Equipment: "water polo balls, goal", DurationMinutes: 15, YoutubeURL: "https://www.youtube.com/watch?v=VrX48GP3bOU"},
+		{LevelID: 4, Name: "Contact Shooting", Description: "Shooter receives ball at 4m with defender on back. Must create space and shoot within 3 seconds. Vary defender pressure from 50% to 100%.", SkillCategory: "shooting", Difficulty: "advanced", Equipment: "water polo balls, goal, caps", DurationMinutes: 15, YoutubeURL: ""},
+		// Level 5 — Collective Play
+		{LevelID: 5, Name: "Pick and Roll Execution", Description: "Center sets pick on wing defender, wing drives to 3m. Practice timing: too early = foul, too late = no advantage. Run from both sides.", SkillCategory: "tactics", Difficulty: "advanced", Equipment: "water polo balls, goal, caps", DurationMinutes: 20, YoutubeURL: ""},
+		{LevelID: 5, Name: "6v5 Man-Up Rotation Drill", Description: "Full man-up set: 4-2 positioning. Practice ball movement around the arc. Dry pass to post when defense collapses. 5 possessions, then rotate players.", SkillCategory: "tactics", Difficulty: "advanced", Equipment: "water polo balls, goal, caps", DurationMinutes: 25, YoutubeURL: "https://www.youtube.com/watch?v=k6CZm8b1wWo"},
+		{LevelID: 5, Name: "Defensive Switching Communication", Description: "3v3 half-court. Offense picks and rolls, defense must call switches loudly. Coach stops play if no verbal communication. Build habit of calling 'switch' and 'stay'.", SkillCategory: "defense", Difficulty: "advanced", Equipment: "water polo balls, goal, caps", DurationMinutes: 15, YoutubeURL: ""},
+		// Level 6 — High-Level Skills
+		{LevelID: 6, Name: "Advanced Faking Combo", Description: "Long fake → drive → backhand shot. Then: double fake → step-out → power shot. 5 reps each combo against active defender at 75% pressure.", SkillCategory: "shooting", Difficulty: "elite", Equipment: "water polo balls, goal", DurationMinutes: 20, YoutubeURL: ""},
+		{LevelID: 6, Name: "Center Play: Seal & Roll", Description: "Center receives ball at 2m with back to goal. Practice seal (pin defender), roll to shooting position, backhand or sweep shot. Alternate left/right side.", SkillCategory: "tactics", Difficulty: "elite", Equipment: "water polo balls, goal, caps", DurationMinutes: 20, YoutubeURL: ""},
+		// Level 7 — Competition Mastery
+		{LevelID: 7, Name: "Full 6v6 Tactical Scrimmage", Description: "Game-speed scrimmage with specific constraints: must execute 2 picks per possession, all goals must come from center or drive. Coach stops play for teaching moments.", SkillCategory: "tactics", Difficulty: "elite", Equipment: "water polo balls, goals, caps, shot clock", DurationMinutes: 30, YoutubeURL: ""},
+		{LevelID: 7, Name: "Fatigue Decision-Making Drill", Description: "Players sprint 50m, then immediately enter 3v2 situation. Must make correct pass/shoot decision under fatigue within 5 seconds. Simulates late-game scenarios.", SkillCategory: "conditioning", Difficulty: "elite", Equipment: "water polo balls, goal, caps", DurationMinutes: 20, YoutubeURL: ""},
+	}
+
+	for _, ex := range exercises {
+		_, err := DB.Exec(
+			`INSERT INTO exercises (level_id, name, description, skill_category, difficulty, equipment, duration_minutes, youtube_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+			ex.LevelID, ex.Name, ex.Description, ex.SkillCategory, ex.Difficulty, ex.Equipment, ex.DurationMinutes, ex.YoutubeURL,
+		)
+		if err != nil {
+			return fmt.Errorf("seed exercise %s: %w", ex.Name, err)
+		}
+	}
+	log.Printf("Seeded %d exercises across all levels", len(exercises))
 	return nil
 }
 
