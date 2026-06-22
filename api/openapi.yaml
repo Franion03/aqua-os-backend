@@ -1,0 +1,208 @@
+openapi: "3.0.3"
+info:
+  title: Aqua OS Backend API
+  version: "1.0.0"
+servers:
+  - url: http://localhost:8080
+paths:
+  /api/health:
+    get:
+      operationId: getHealth
+      responses:
+        "200":
+          description: Health status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  service:
+                    type: string
+                required: [status, service]
+  /api/auth/login:
+    post:
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+              required: [username, password]
+      responses:
+        "200":
+          description: JWT token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                required: [token]
+  /api/levels:
+    get:
+      operationId: getLevels
+      responses:
+        "200":
+          description: List of levels
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  levels:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Level"
+                required: [levels]
+  /api/levels/{id}:
+    get:
+      operationId: getLevelById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Level with exercises
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Level"
+                  - type: object
+                    properties:
+                      exercises:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Exercise"
+                    required: [exercises]
+  /api/exercises:
+    get:
+      operationId: getExercises
+      parameters:
+        - name: level_id
+          in: query
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of exercises
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  exercises:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Exercise"
+                required: [exercises]
+    post:
+      operationId: createExercise
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                level_id:
+                  type: integer
+                difficulty:
+                  type: string
+                duration_min:
+                  type: integer
+                equipment:
+                  type: string
+                video_url:
+                  type: string
+              required: [name, description, level_id]
+      responses:
+        "201":
+          description: Created exercise
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Exercise"
+  /api/exercises/{id}:
+    delete:
+      operationId: deleteExercise
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Deletion status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                required: [status]
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Level:
+      type: object
+      properties:
+        id:
+          type: integer
+        number:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        skills:
+          type: array
+          items:
+            type: string
+      required: [id, number, name, description, skills]
+    Exercise:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        level_id:
+          type: integer
+        difficulty:
+          type: string
+        duration_min:
+          type: integer
+        equipment:
+          type: string
+        video_url:
+          type: string
+      required: [id, name, description, level_id, difficulty, duration_min, equipment, video_url]

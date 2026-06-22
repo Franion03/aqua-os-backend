@@ -64,3 +64,15 @@ docker run -p 8080:8080 aqua-os-backend
 ## License
 
 GPL-3.0
+
+## Metrics
+
+Prometheus metrics are available via the `internal/metrics` package. To enable, register the handler in your router:
+
+```go
+import "aqua-os-backend/internal/metrics"
+
+r.Handle("/metrics", metrics.Handler())
+```
+
+Exposes `http_requests_total` and `http_request_duration_seconds` at `/metrics`.
